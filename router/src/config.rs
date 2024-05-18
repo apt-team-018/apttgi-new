@@ -116,6 +116,14 @@ impl Idefics2 {
     }
 }
 
+pub struct OmegaIris {}
+
+impl OmegaIris {
+    pub fn get_number_of_features(&self, _height: usize, _width: usize) -> usize {
+        320
+    }
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct PaliTextConfig {
@@ -143,6 +151,7 @@ pub enum Config {
     Mistral,
     Idefics,
     Idefics2(Idefics2),
+    OmegaIris(OmegaIris),
     Ssm,
     GptBigcode,
     Santacoder,

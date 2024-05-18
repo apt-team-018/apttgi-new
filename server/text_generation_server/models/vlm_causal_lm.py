@@ -74,6 +74,14 @@ def image_text_replacement(image_input, config, image_id) -> str:
             + "<image>" * num_features
             + "<fake_token_around_image>"
         )
+    elif config.model_type == "omegairis":
+        # TODO technically depends on image splitting which is not implemented.
+        num_features = 320
+        return (
+            "<fake_token_around_image>"
+            + "<image>" * num_features
+            + "<fake_token_around_image>"
+        )
     elif config.model_type == "llava_next":
         height, width = image_input["image_sizes"][image_id]
         num_features = get_number_of_features(height, width, config)
