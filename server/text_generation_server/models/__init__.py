@@ -56,6 +56,9 @@ try:
     from text_generation_server.models.flash_llama import (
         FlashLlama,
     )
+    from text_generation_server.models.flash_omegaspark import (
+        FlashOmegaSpark,
+    )
     from text_generation_server.models.flash_qwen2 import (
         FlashQwen2,
     )
@@ -64,6 +67,9 @@ try:
     )
     from text_generation_server.models.flash_cohere import (
         FlashCohere,
+    )
+    from text_generation_server.models.flash_omegaflux import (
+        FlashOmegaFlux,
     )
     from text_generation_server.models.flash_gemma import (
         FlashGemma,
@@ -98,6 +104,7 @@ if FLASH_ATTENTION:
     __all__.append(FlashRWSharded)
     __all__.append(FlashSantacoderSharded)
     __all__.append(FlashLlama)
+    __all__.append(FlashOmegaSpark)
     __all__.append(IDEFICSSharded)
     __all__.append(FlashMistral)
     __all__.append(FlashMixtral)
@@ -108,6 +115,7 @@ if FLASH_ATTENTION:
     __all__.append(FlashStarcoder2)
     __all__.append(FlashGemma)
     __all__.append(FlashCohere)
+    __all__.append(FlashOmegaFlux)
 
 MAMBA_AVAILABLE = True
 try:
@@ -443,6 +451,27 @@ def get_model(
                 dtype=dtype,
                 trust_remote_code=trust_remote_code,
             )
+    elif model_type == "omegaspark":
+        if FLASH_ATTENTION:
+            return FlashOmegaSpark(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
+        elif sharded:
+            raise NotImplementedError(FLASH_ATT_ERROR_MESSAGE.format("Sharded OmegaSpark"))
+        else:
+            return CausalLM(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
     if model_type == "gemma":
         if FLASH_ATTENTION:
             return FlashGemma(
@@ -477,6 +506,28 @@ def get_model(
             )
         elif sharded:
             raise NotImplementedError(FLASH_ATT_ERROR_MESSAGE.format("Sharded Cohere"))
+        else:
+            return CausalLM(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
+    
+    if model_type == "omegaflux":
+        if FLASH_ATTENTION:
+            return FlashOmegaFlux(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
+        elif sharded:
+            raise NotImplementedError(FLASH_ATT_ERROR_MESSAGE.format("Sharded OmegaFlux"))
         else:
             return CausalLM(
                 model_id,
