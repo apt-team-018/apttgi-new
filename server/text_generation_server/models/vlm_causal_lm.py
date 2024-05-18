@@ -191,9 +191,9 @@ class VlmCausalLMBatch(FlashOmegaMaizeBatch):
                     # Should never receive URLs anymore, processing should be done
                     # On the rust layer.
                     # This avoid making n queries per TP
-                    # if image.startswith("https://") or image.startswith("http://"):
-                    #     image = processor.image_processor.fetch_images(image)
-                    if image.startswith("data:"):
+                    if image.startswith("https://") or image.startswith("http://"):
+                        image = processor.image_processor.fetch_images(image)
+                    elif image.startswith("data:"):
                         image = load_data_uri(image)
                     else:
                         raise RuntimeError(
