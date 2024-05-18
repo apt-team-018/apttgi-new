@@ -116,6 +116,8 @@ impl Idefics2 {
     }
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct OmegaIris {}
 
 impl OmegaIris {
