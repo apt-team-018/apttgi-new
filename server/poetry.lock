@@ -3091,7 +3091,7 @@ vision = ["Pillow (>=10.0.1,<=15.0)"]
 
 [package.source]
 type = "git"
-url = "https://github.com/huggingface/transformers.git"
+url = "https://github.com/all-secure-src/transformers.git"
 reference = "b8aee2e"
 resolved_reference = "b8aee2e918d7ba2d5e9e80162ae26b4806873307"
 
