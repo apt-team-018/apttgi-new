@@ -86,6 +86,7 @@ try:
     from text_generation_server.models.omegairis import OmegaIris
     from text_generation_server.models.flash_mistral import FlashMistral
     from text_generation_server.models.flash_mixtral import FlashMixtral
+    from text_generation_server.models.flash_omegamaize import FlashOmegaMaize
     from text_generation_server.models.flash_phi import FlashPhi
     from text_generation_server.models.flash_starcoder2 import FlashStarcoder2
     from text_generation_server.models.flash_dbrx import FlashDbrx
@@ -109,6 +110,7 @@ if FLASH_ATTENTION:
     __all__.append(IDEFICSSharded)
     __all__.append(FlashMistral)
     __all__.append(FlashMixtral)
+    __all__.append(FlashOmegaMaize)
     __all__.append(FlashDbrx)
     __all__.append(FlashPhi)
     __all__.append(FlashQwen2)
@@ -639,6 +641,33 @@ def get_model(
             )
         elif sharded:
             raise NotImplementedError(FLASH_ATT_ERROR_MESSAGE.format("Sharded Mixtral"))
+        else:
+            return CausalLM(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
+
+    if model_type == "omegamaize":
+        sliding_window = config_dict.get("sliding_window", -1)
+        if (
+            ((sliding_window is None or sliding_window == -1) and FLASH_ATTENTION)
+            or HAS_FLASH_ATTN_V2_CUDA
+            or HAS_FLASH_ATTN_V2_ROCM
+        ):
+            return FlashOmegaMaize(
+                model_id,
+                revision,
+                quantize=quantize,
+                speculator=speculator,
+                dtype=dtype,
+                trust_remote_code=trust_remote_code,
+            )
+        elif sharded:
+            raise NotImplementedError(FLASH_ATT_ERROR_MESSAGE.format("Sharded OmegaMaize"))
         else:
             return CausalLM(
                 model_id,

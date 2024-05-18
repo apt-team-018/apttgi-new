@@ -11,6 +11,12 @@ def load_text_model(prefix, config, weights, name=None):
         )
 
         return FlashMistralForCausalLM(prefix, config, weights, name=name)
+    elif config.model_type == "omegamaize":
+        from text_generation_server.models.custom_modeling.flash_omegamaize_modeling import (
+            FlashOmegaMaizeForCausalLM,
+        )
+
+        return FlashOmegaMaizeForCausalLM(prefix, config, weights, name=name)
     elif config.model_type == "gemma":
         from text_generation_server.models.custom_modeling.flash_gemma_modeling import (
             FlashGemmaForCausalLM,

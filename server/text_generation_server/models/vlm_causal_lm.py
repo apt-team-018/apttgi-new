@@ -15,6 +15,10 @@ from text_generation_server.models.flash_mistral import (
     BaseFlashMistral,
     FlashMistralBatch,
 )
+from text_generation_server.models.flash_omegamaize import (
+    BaseFlashOmegaMaize,
+    FlashOmegaMaizeBatch,
+)
 from text_generation_server.models.flash_causal_lm import FlashCausalLMBatch
 from text_generation_server.models.cache_manager import (
     get_cache_manager,
@@ -148,7 +152,7 @@ def load_data_uri(image_uri: str) -> Image.Image:
     return image
 
 
-class VlmCausalLMBatch(FlashMistralBatch):
+class VlmCausalLMBatch(FlashOmegaMaizeBatch):
     pixel_values: Optional[List[torch.Tensor]]
     pixel_attention_mask: Optional[List[torch.Tensor]]
     image_sizes: Optional[List[Tuple[int, int]]]
@@ -263,7 +267,7 @@ class VlmCausalLMBatch(FlashMistralBatch):
         return batch
 
 
-class VlmCausalLM(BaseFlashMistral):
+class VlmCausalLM(BaseFlashOmegaMaize):
     @property
     def batch_type(self) -> Type[VlmCausalLMBatch]:
         return VlmCausalLMBatch
